@@ -7,9 +7,10 @@
 
 // unsigned char testfont[8 * 256];
 
-unsigned char screen[200 * 200 * 4];
+// unsigned char screen[200 * 200 * 4];
+unsigned char screen[NXDRAW_SIZE_SCREEN(200, 200)];
+unsigned char palette[NXDRAW_SIZE_PALETTE(16)];
 unsigned char events[64];
-unsigned char palette[16 * 4];
 
 unsigned char image[8 * 8] = {
     3, 0, 0, 0, 0, 0, 0, 3, //
@@ -62,9 +63,10 @@ int main() {
 
     nxd_draw_char(testfont, 'X', 20, 20);
 
-    // for (int i = 0; i < 255; i++) {
-    //   nxd_draw_char(testfont, i, i % 5, i / 5);
-    // }
+    for (int i = 0; i < 255; i++) {
+      nxd_draw_char(testfont, i, (i % 20) * 8, (i / 20) * 8);
+    }
+    nxd_draw_cstring(testfont, "the cake is a lie", 0, 0);
     /*
     nxd_draw_char(testfont, 'B');
     nxd_cursor_cr();

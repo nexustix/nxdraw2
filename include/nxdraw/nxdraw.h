@@ -1,6 +1,9 @@
 #ifndef NXDRAW_NXDRAW_H
 #define NXDRAW_NXDRAW_H
 
+#define NXDRAW_SIZE_SCREEN(w, h) ((w) * (h)*4)
+#define NXDRAW_SIZE_PALETTE(n) ((n)*4)
+
 #include "event.h"
 
 int nxd_window(int width, int height);
@@ -12,10 +15,10 @@ int nxd_fullscreen(int state);
 int nxd_tick();
 int nxd_present();
 
-//// draw area
-int nxd_area_enable(int x, int y, int w, int h);
-int nxd_area_disable();
-int nxd_area_info(int *x, int *y, int *w, int *h);
+//// clip area
+int nxd_clip_enable(int x, int y, int w, int h);
+int nxd_clip_disable();
+int nxd_clip_info(int *x, int *y, int *w, int *h);
 
 // stuff format
 // int nxd_format(int w, int h, int d);

@@ -48,7 +48,7 @@ int nxd_screen(unsigned char *sprite, int width, int height, int depth) {
 
   _screen.data = sprite;
 
-  nxd_area_disable();
+  nxd_clip_disable();
 
   return 0;
 }
@@ -73,7 +73,7 @@ int nxd_present() {
 // Area
 //
 //
-int nxd_area_enable(int x, int y, int w, int h) {
+int nxd_clip_enable(int x, int y, int w, int h) {
   _area.x1 = x;
   _area.y1 = y;
   _area.x2 = x + w;
@@ -83,7 +83,7 @@ int nxd_area_enable(int x, int y, int w, int h) {
   _area_active = 1;
   return 0;
 }
-int nxd_area_disable() {
+int nxd_clip_disable() {
   _area.x1 = 0;
   _area.y1 = 0;
   _area.x2 = _screen.width;
@@ -93,7 +93,7 @@ int nxd_area_disable() {
   _area_active = 1;
   return 0;
 }
-int nxd_area_info(int *x, int *y, int *w, int *h) {
+int nxd_clip_info(int *x, int *y, int *w, int *h) {
   *x = _area.x1;
   *y = _area.y1;
   *w = _area.w;
