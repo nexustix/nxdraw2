@@ -1,3 +1,6 @@
+LIB_INSTALL=/usr/lib
+INCLUDE_INSTALL=/usr/include
+
 # destination for object files
 OBJDIR = build/obj
 
@@ -41,18 +44,26 @@ OBJS := $(OBJS:.c=.o)
 #debug: kellerspiel
 #	nemiver ./kellerspiel
 
-syslib_path="./lib/"
-sysinclude_path="./lib/"
+
 
 all: nxdraw_shared nxdraw_static
 
 nxdraw_static: $(OBJS)
-	ar rcs libnxdraw.a $(OBJS)
+	mkdir -p ./build/static/nxdraw
+	ar rcs ./build/static/nxdraw/libnxdraw.a $(OBJS)
 
 nxdraw_shared: $(OBJS)
-	$(CC) -shared $(CIFLAGS) $(CLFLAGS) $(CFLAGS) -o libnxdraw.so $(OBJS)
+	mkdir -p ./build/dynamic/nxdraw
+	$(CC) -shared $(CIFLAGS) $(CLFLAGS) $(CFLAGS) -o ./build/dynamic/nxdraw/libnxdraw.so $(OBJS)
 
 install:
+	mkdir -p ${INCLUDE_INSTALL}/nxdraw
+	mkdir -p ${INCLUDE_INSTALL}/nxdraw/fonts
+	cp ./include/nxdraw/nxdraw.h ${INCLUDE_INSTALL}/nxdraw/
+	cp ./include/nxdraw/fonts/testfont.h ${INCLUDE_INSTALL}/nxdraw/fonts
+
+	mkdir -p ${LIB_INSTALL}/nxdraw
+	cp ./libnxdraw.so ${LIB_INSTALL}/
 
 
 # rule that can turn any .c file into an .o file in object directory

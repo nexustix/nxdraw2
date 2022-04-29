@@ -1,8 +1,10 @@
 _discard/
 
+.vscode/
 .cache/
 build/
 
+compile_commands.json
 src/example/a.out
 libnxdraw.a
 libnxdraw.so
