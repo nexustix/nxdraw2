@@ -31,15 +31,6 @@ int nxd_palette_fg(unsigned int id);
 int nxd_palette_bg(unsigned int id);
 int nxd_palette_swap();
 
-// cursor
-int nxd_cursor_set_x(int x);
-int nxd_cursor_set_y(int y);
-// int nxd_cursor_get_x();
-// int nxd_cursor_get_y();
-int nxd_cursor_set(int x, int y);
-int nxd_cursor_move(int dx, int dy);
-int nxd_cursor_cr();
-
 // drawing
 int nxd_draw_pixel(int x, int y);
 int nxd_draw_line(int x1, int y1, int x2, int y2);
@@ -55,8 +46,8 @@ int nxd_draw_fill();
 // int nxd_draw_sprite(void *sprite, int x, int y);
 // int nxd_draw_tile(void *tilemap, int index, int x, int y);
 int nxd_draw_bitmap(unsigned char *bitmap, int width, int height, int x, int y);
-int nxd_draw_char(unsigned char *font, unsigned char c);
-int nxd_draw_cstring(unsigned char *font, const char *cstring);
+int nxd_draw_char(unsigned char *font, unsigned char c, int x, int y);
+int nxd_draw_cstring(unsigned char *font, const char *cstring, int x, int y);
 
 // event
 int nxd_event_init(void *data, unsigned int size);

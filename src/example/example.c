@@ -33,9 +33,9 @@ int main() {
   nxd_palette_rgb(3, 255, 127, 0);
   nxd_palette_rgb(4, 0, 0, 255);
 
-  nxd_area_enable(10, 10, 8 * 8, 8 * 20);
-  // nxd_area_enable(10, 20, 3, 3);
-  // nxd_area_disable();
+  // nxd_area_enable(10, 10, 8 * 8, 8 * 20);
+  //  nxd_area_enable(10, 20, 3, 3);
+  //  nxd_area_disable();
   nxd_palette_fg(3);
   nxd_palette_bg(451);
   nxd_palette_swap();
@@ -56,13 +56,15 @@ int main() {
     nxd_draw_pixel(3, 3);
     nxd_draw_pixel(3, 5);
 
-    nxd_cursor_set(0, 0);
-    // nxd_draw_char(testfont, 0);
-    // nxd_draw_char(testfont, 1);
+    // nxd_cursor_set(0, 0);
+    //  nxd_draw_char(testfont, 0);
+    //  nxd_draw_char(testfont, 1);
 
-    for (int i = 0; i < 255; i++) {
-      nxd_draw_char(testfont, i);
-    }
+    nxd_draw_char(testfont, 'X', 20, 20);
+
+    // for (int i = 0; i < 255; i++) {
+    //   nxd_draw_char(testfont, i, i % 5, i / 5);
+    // }
     /*
     nxd_draw_char(testfont, 'B');
     nxd_cursor_cr();
@@ -90,13 +92,13 @@ int main() {
 
     // nxd_draw_rectangle(1, 3, 5, 7);
 
-    nxd_draw_bitmap(image, 8, 8, 0, 0);
+    // nxd_draw_bitmap(image, 8, 8, 0, 0);
 
-    nxd_palette_fg(4);
-    nxd_draw_rectangle(3, 3, 10, 10);
-    nxd_draw_pixel(0, 0);
-    nxd_draw_pixel(1, 1);
-    nxd_draw_pixel(2, 2);
+    // nxd_palette_fg(4);
+    // nxd_draw_rectangle(3, 3, 10, 10);
+    // nxd_draw_pixel(0, 0);
+    // nxd_draw_pixel(1, 1);
+    // nxd_draw_pixel(2, 2);
 
     nxd_present();
   }

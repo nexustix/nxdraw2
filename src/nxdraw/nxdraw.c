@@ -23,9 +23,9 @@ static nxdraw_Window _window;
 static nxd_Event _event;
 
 static int _char_w = 8;
-static int _char_h = 8;
-static int _cursor_x = 0;
-static int _cursor_y = 0;
+// static int _char_h = 8;
+//  static int _cursor_x = 0;
+//  static int _cursor_y = 0;
 
 //
 //
@@ -136,47 +136,6 @@ int nxd_palette_swap() {
 
 //
 //
-// Cursor
-//
-//
-
-int nxd_cursor_set_x(int x) {
-  _cursor_x = x * _char_w;
-  return _cursor_x;
-}
-int nxd_cursor_set_y(int y) {
-  _cursor_y = y * _char_h;
-  return _cursor_y;
-}
-// int nxd_cursor_getr_x(){
-//  return _cursor_x;
-//}
-// int nxd_cursor_getr_y(){
-//  return _cursor_y;
-//}
-int nxd_cursor_set(int x, int y) {
-  _cursor_x = x * _char_w;
-  _cursor_y = y * _char_h;
-  return 0;
-}
-int nxd_cursor_setraw(int x, int y) {
-  _cursor_x = x;
-  _cursor_y = y;
-  return 0;
-}
-int nxd_cursor_move(int dx, int dy) {
-  _cursor_x += dx * _char_w;
-  _cursor_y += dy * _char_h;
-  return 0;
-}
-int nxd_cursor_cr() {
-  _cursor_x = 0;
-  _cursor_y += _char_h;
-  return 0;
-}
-
-//
-//
 // Draw
 //
 //
@@ -221,7 +180,8 @@ int nxd_draw_bitmap(unsigned char *bitmap, int width, int height, int x,
   return 0;
 }
 
-int nxd_draw_char(unsigned char *font, unsigned char c) {
+int nxd_draw_char(unsigned char *font, unsigned char c, int x, int y) {
+  /*
   nxdraw_char_draw(&_screen, font, _fg, _bg, 8, c, _cursor_x, _cursor_y);
 
   _cursor_x += _char_w;
@@ -235,14 +195,17 @@ int nxd_draw_char(unsigned char *font, unsigned char c) {
   //  _cursor_x = 0;
   //  _cursor_y = 0;
   //}
+  */
+
+  nxdraw_char_draw(&_screen, font, _fg, _bg, 8, c, x, y);
   return 0;
 }
 
-int nxd_draw_cstring(unsigned char *font, const char *cstring) {
+int nxd_draw_cstring(unsigned char *font, const char *cstring, int x, int y) {
   unsigned char c = 0;
   for (int i = 0;; i++) {
     if ((c = cstring[i])) {
-      nxd_draw_char(font, (unsigned char)c);
+      nxd_draw_char(font, (unsigned char)c, x + (_char_w * i), y);
     } else {
       break;
     }
