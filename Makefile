@@ -46,7 +46,7 @@ OBJS := $(OBJS:.c=.o)
 
 
 
-all: nxdraw_shared nxdraw_static
+all: clean nxdraw_shared nxdraw_static
 
 nxdraw_static: $(OBJS)
 	mkdir -p ./build/static/nxdraw
@@ -54,7 +54,7 @@ nxdraw_static: $(OBJS)
 
 nxdraw_shared: $(OBJS)
 	mkdir -p ./build/dynamic/nxdraw
-	$(CC) -shared $(CIFLAGS) $(CLFLAGS) $(CFLAGS) -o ./build/dynamic/nxdraw/libnxdraw.so $(OBJS)
+	$(CC) -Wl,--version-script=nxdraw.version -shared $(CIFLAGS) $(CLFLAGS)  $(CFLAGS) -o ./build/dynamic/nxdraw/libnxdraw.so $(OBJS)
 
 install:
 	mkdir -p ${INCLUDE_INSTALL}/nxdraw

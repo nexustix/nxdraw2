@@ -16,14 +16,16 @@ int nxd_tick();
 int nxd_present();
 
 //// clip area
-int nxd_clip_enable(int x, int y, int w, int h);
+int nxd_clip(int x, int y, int w, int h);
 int nxd_clip_disable();
 int nxd_clip_info(int *x, int *y, int *w, int *h);
+int nxd_translate(int x, int y);
+int nxd_translate_info(int *x, int *y);
 
 // stuff format
 // int nxd_format(int w, int h, int d);
 // int nxd_format_info(int *w, int *h, int *d);
-int nxd_format_char(int w, int h);
+// int nxd_format_char(int w, int h);
 
 //// palette
 int nxd_palette(unsigned char *data, unsigned int size);
@@ -41,7 +43,7 @@ int nxd_draw_line(int x1, int y1, int x2, int y2);
 // int nxd_draw_linev(int x, int y, int h);
 int nxd_draw_rectangle(int x, int y, int w, int h);
 int nxd_draw_rectangleb(int x, int y, int w, int h);
-int nxd_draw_fill();
+int nxd_draw_clear();
 // int nxd_draw_circle(int x, int y, int r);
 // int nxd_draw_circleb(int x, int y, int r);
 // int nxd_draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3);

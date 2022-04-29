@@ -4,7 +4,7 @@
 #include "colour.h"
 #include "screen.h"
 
-#include "draw_area.h"
+#include "nxdraw/draw_area.h"
 #include "palette.h"
 
 static int _nxlib_abs(int n) {
@@ -18,9 +18,11 @@ int nxdraw_draw_pixel(nxdraw_Screen *screen, unsigned int c, int x, int y) {
   // nxdraw_Depth depth = NXD_DEPTH_32;
   if (c) {
     const unsigned char *colour = nxdraw_palette_get_colour(c);
-
-    if (nxdraw_draw_area_translate(&x, &y) && x >= 0 && y >= 0 &&
-        x < screen->width && y < screen->height) {
+    nxdraw_draw_area_translate(&x, &y);
+    if (nxdraw_draw_area_inside(x, y)
+        //&& x >= 0 && y >= 0 &&
+        // x < screen->width && y < screen->height
+    ) {
       int index = (y * screen->width) + x;
       if (index >= 0 && index < screen->pixelcount) {
         switch (screen->d) {

@@ -5,10 +5,10 @@
 
 //#include <stdio.h>
 
-// unsigned char testfont[8 * 256];
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
 
-// unsigned char screen[200 * 200 * 4];
-unsigned char screen[NXDRAW_SIZE_SCREEN(200, 200)];
+unsigned char screen[NXDRAW_SIZE_SCREEN(SCREEN_WIDTH, SCREEN_HEIGHT)];
 unsigned char palette[NXDRAW_SIZE_PALETTE(16)];
 unsigned char events[64];
 
@@ -28,20 +28,23 @@ int pos_y = 0;
 
 int main() {
   nxd_event_init(&events, 64);
-  nxd_window(200 * 4, 200 * 4);
-  nxd_screen(screen, 200, 200, 4);
+  nxd_window(SCREEN_WIDTH * 4, SCREEN_HEIGHT * 4);
+  nxd_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 4);
   nxd_palette(palette, 16 * 4);
   nxd_palette_rgb(3, 255, 127, 0);
-  nxd_palette_rgb(4, 0, 0, 255);
+  nxd_palette_rgb(4, 0, 0, 127);
 
   // nxd_area_enable(10, 10, 8 * 8, 8 * 20);
-  //  nxd_area_enable(10, 20, 3, 3);
-  //  nxd_area_disable();
-  nxd_palette_fg(3);
-  nxd_palette_bg(451);
+  // nxd_area_enable(10, 20, 3, 3);
+  // nxd_area_disable();
+  nxd_palette_fg(4);
+  nxd_palette_bg(3);
   nxd_palette_swap();
 
-  nxd_draw_fill();
+  // nxd_translate(-10, -5);
+  // nxd_clip(5, 1, 10, 20);
+
+  nxd_draw_clear();
   while (nxd_tick()) {
     nxd_time_await_limit(30);
     while (nxd_events()) {
@@ -57,40 +60,12 @@ int main() {
     nxd_draw_pixel(3, 3);
     nxd_draw_pixel(3, 5);
 
-    // nxd_cursor_set(0, 0);
-    //  nxd_draw_char(testfont, 0);
-    //  nxd_draw_char(testfont, 1);
-
-    nxd_draw_char(testfont, 'X', 20, 20);
+    // nxd_draw_char(testfont, 'X', 20, 20);
 
     for (int i = 0; i < 255; i++) {
-      nxd_draw_char(testfont, i, (i % 20) * 8, (i / 20) * 8);
+      // nxd_draw_char(testfont, i, (i % 20) * 8, (i / 20) * 8);
     }
-    nxd_draw_cstring(testfont, "the cake is a lie", 0, 0);
-    /*
-    nxd_draw_char(testfont, 'B');
-    nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "THE QUICK BROWN ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "FOX JUMPS OVER ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "THE LAZY  DOG ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "012 34567 89 ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "the quick brown ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "fox jumps over ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "the lazy  dog ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, ",.! {}[]@ ()<> ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "|~? \\/#$% &*'\" ");
-    // nxd_cursor_cr();
-    nxd_draw_cstring(testfont, "+-^ _`;:= ");
-    // nxd_cursor_cr();
-    */
+    // nxd_draw_cstring(testfont, "the cake is a lie", 0, 0);
 
     // nxd_draw_rectangle(1, 3, 5, 7);
 
@@ -98,9 +73,6 @@ int main() {
 
     // nxd_palette_fg(4);
     // nxd_draw_rectangle(3, 3, 10, 10);
-    // nxd_draw_pixel(0, 0);
-    // nxd_draw_pixel(1, 1);
-    // nxd_draw_pixel(2, 2);
 
     nxd_present();
   }

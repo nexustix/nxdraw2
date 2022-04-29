@@ -1,0 +1,6 @@
+NXDRAW_CORE_0.6.0 {
+	global: 
+    nxd_*;
+
+	local: *;
+};

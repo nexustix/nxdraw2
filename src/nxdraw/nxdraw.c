@@ -73,14 +73,12 @@ int nxd_present() {
 // Area
 //
 //
-int nxd_clip_enable(int x, int y, int w, int h) {
-  _area.x1 = x;
-  _area.y1 = y;
-  _area.x2 = x + w;
-  _area.y2 = y + h;
-  _area.w = w;
-  _area.h = h;
-  _area_active = 1;
+int nxd_clip(int x, int y, int w, int h) {
+  _area.x1 = (x >= 0) ? (x < _screen.width) ? x : _screen.width : 0;
+  _area.y1 = (y >= 0) ? (y < _screen.width) ? y : _screen.height : 0;
+  _area.x2 = (x + w >= 0) ? (x + w < _screen.width) ? x + w : _screen.width : 0;
+  _area.y2 =
+      (y + h >= 0) ? (y + h < _screen.width) ? y + h : _screen.height : 0;
   return 0;
 }
 int nxd_clip_disable() {
@@ -88,16 +86,26 @@ int nxd_clip_disable() {
   _area.y1 = 0;
   _area.x2 = _screen.width;
   _area.y2 = _screen.height;
-  _area.w = _screen.width;
-  _area.h = _screen.height;
-  _area_active = 1;
+
   return 0;
 }
+
 int nxd_clip_info(int *x, int *y, int *w, int *h) {
   *x = _area.x1;
   *y = _area.y1;
-  *w = _area.w;
-  *h = _area.h;
+  *w = _area.x2 - _area.x1;
+  *h = _area.y2 - _area.y1;
+  return 0;
+}
+
+int nxd_translate(int x, int y) {
+  _area.xt = x;
+  _area.yt = y;
+  return 0;
+}
+int nxd_translate_info(int *x, int *y) {
+  *x = _area.xt;
+  *y = _area.yt;
   return 0;
 }
 
@@ -162,8 +170,12 @@ int nxd_draw_rectangleb(int x, int y, int w, int h) {
   nxdraw_draw_rectangleb(&_screen, _fg, x, y, w, h);
   return 0;
 }
-int nxd_draw_fill() {
-  nxd_draw_rectangle(0, 0, _screen.width, _screen.height);
+int nxd_draw_clear() {
+  // nxd_draw_rectangle(0, 0, _screen.width, _screen.height);
+  // nxd_draw_rectangle(0 - _area.xt, 0 - _area.yt, _screen.width,
+  // _screen.height);
+  nxdraw_draw_rectangle(&_screen, _bg, 0 - _area.xt, 0 - _area.yt,
+                        _screen.width, _screen.height);
   return 0;
 }
 
@@ -181,22 +193,6 @@ int nxd_draw_bitmap(unsigned char *bitmap, int width, int height, int x,
 }
 
 int nxd_draw_char(unsigned char *font, unsigned char c, int x, int y) {
-  /*
-  nxdraw_char_draw(&_screen, font, _fg, _bg, 8, c, _cursor_x, _cursor_y);
-
-  _cursor_x += _char_w;
-  int tmpx = _cursor_x;
-  if (!nxdraw_draw_area_translate_x(&tmpx)) {
-    _cursor_x = 0;
-    _cursor_y += _char_h;
-  }
-  // int tmpy = _cursor_y;
-  // if (!nxdraw_draw_area_translate_y(&tmpy)) {
-  //  _cursor_x = 0;
-  //  _cursor_y = 0;
-  //}
-  */
-
   nxdraw_char_draw(&_screen, font, _fg, _bg, 8, c, x, y);
   return 0;
 }
