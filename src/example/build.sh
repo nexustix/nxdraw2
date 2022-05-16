@@ -1,3 +1,8 @@
+WD=$(pwd)
+cd ../../
+make
+cd $WD
+
 gcc -I../../include/ -lglfw -lGL ./example.c ../../build/static/nxdraw/libnxdraw.a && ./a.out
 #clang++ -I../../include/ -lglfw -lGL ./example.c -lnxdraw && ./a.out
 
