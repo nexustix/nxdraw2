@@ -234,7 +234,10 @@ int nxd_event_get(nxd_Event *event) {
   return 0;
 }
 
-int nxd_events() { return nxdraw_event_buffer_count() > 0; }
+int nxd_events() {
+  // return nxdraw_event_buffer_count() > 0;
+  return !nxdraw_event_buffer_empty();
+}
 
 int nxd_event_kind() { return _event.kind; }
 int nxd_event_x() { return _event.x / _window.pixel_width; }
