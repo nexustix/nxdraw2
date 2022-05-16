@@ -34,12 +34,12 @@ static int _char_w = 8;
 //
 
 int nxd_cleanup() { return 0; }
-int nxd_window(int width, int height) {
+int nxd_init_window(int width, int height) {
   nxdraw_window_init(&_window, width, height);
   return 0;
 }
 
-int nxd_screen(unsigned char *sprite, int width, int height, int depth) {
+int nxd_init_canvas(unsigned char *sprite, int width, int height, int depth) {
   _screen.width = width;
   _screen.height = height;
   _screen.d = depth;
@@ -114,7 +114,7 @@ int nxd_translate_info(int *x, int *y) {
 // Palette
 //
 //
-int nxd_palette(unsigned char *data, unsigned int size) {
+int nxd_init_palette(unsigned char *data, unsigned int size) {
   nxdraw_palette_set(data, size, 4);
   return 0;
 }
@@ -132,6 +132,12 @@ int nxd_palette_fg(unsigned int id) {
 
 int nxd_palette_bg(unsigned int id) {
   _bg = id;
+  return 0;
+}
+
+int nxd_palette_info(int *fg, int *bg) {
+  *fg = _fg;
+  *bg = _bg;
   return 0;
 }
 
@@ -215,7 +221,7 @@ int nxd_draw_cstring(unsigned char *font, const char *cstring, int x, int y) {
 //
 //
 
-int nxd_event_init(void *data, unsigned int size) {
+int nxd_init_event(void *data, unsigned int size) {
   return nxdraw_event_buffer_init(data, size);
 }
 

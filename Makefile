@@ -44,8 +44,6 @@ OBJS := $(OBJS:.c=.o)
 #debug: kellerspiel
 #	nemiver ./kellerspiel
 
-
-
 all: clean nxdraw_shared nxdraw_static
 
 nxdraw_static: $(OBJS)
@@ -60,10 +58,11 @@ install:
 	mkdir -p ${INCLUDE_INSTALL}/nxdraw
 	mkdir -p ${INCLUDE_INSTALL}/nxdraw/fonts
 	cp ./include/nxdraw/nxdraw.h ${INCLUDE_INSTALL}/nxdraw/
+	cp ./include/nxdraw/event.h ${INCLUDE_INSTALL}/nxdraw/
 	cp ./include/nxdraw/fonts/testfont.h ${INCLUDE_INSTALL}/nxdraw/fonts
 
 	mkdir -p ${LIB_INSTALL}/nxdraw
-	cp ./libnxdraw.so ${LIB_INSTALL}/
+	cp ./build/dynamic/nxdraw/libnxdraw.so ${LIB_INSTALL}/
 
 
 # rule that can turn any .c file into an .o file in object directory

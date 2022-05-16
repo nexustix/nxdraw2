@@ -1,6 +1,10 @@
 #ifndef NXDRAW_EVENT_H
 #define NXDRAW_EVENT_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 typedef enum nxd_EventKind {
   NDX_EVENT_VOID = 0,
   NXD_EVENT_UNKNOWN,
@@ -23,5 +27,9 @@ typedef struct nxd_Event {
   unsigned char ascii_low; // lowercase ASCII from sym
   unsigned int text;       // adjusted ASCII (masked UTF-n, will garble)
 } nxd_Event;
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif

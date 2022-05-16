@@ -4,12 +4,16 @@
 #define NXDRAW_SIZE_SCREEN(w, h) ((w) * (h)*4)
 #define NXDRAW_SIZE_PALETTE(n) ((n)*4)
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 #include "event.h"
 
-int nxd_window(int width, int height);
+int nxd_init_window(int width, int height);
 int nxd_cleanup();
 
-int nxd_screen(unsigned char *sprite, int width, int height, int depth);
+int nxd_init_canvas(unsigned char *sprite, int width, int height, int depth);
 int nxd_screen_info(int *width, int *height);
 int nxd_fullscreen(int state);
 int nxd_tick();
@@ -28,12 +32,13 @@ int nxd_translate_info(int *x, int *y);
 // int nxd_format_char(int w, int h);
 
 //// palette
-int nxd_palette(unsigned char *data, unsigned int size);
+int nxd_init_palette(unsigned char *data, unsigned int size);
 // int nxd_palette_set(int id, int d, unsigned char v);
 int nxd_palette_rgb(unsigned int id, unsigned char r, unsigned char g,
                     unsigned char b);
 int nxd_palette_fg(unsigned int id);
 int nxd_palette_bg(unsigned int id);
+int nxd_palette_info(int *fg, int *bg);
 int nxd_palette_swap();
 
 // drawing
@@ -55,7 +60,7 @@ int nxd_draw_char(unsigned char *font, unsigned char c, int x, int y);
 int nxd_draw_cstring(unsigned char *font, const char *cstring, int x, int y);
 
 // event
-int nxd_event_init(void *data, unsigned int size);
+int nxd_init_event(void *data, unsigned int size);
 // int nxd_event_push(const nxd_Event *event);
 int nxd_event_get(nxd_Event *event);
 int nxd_event_peek();
@@ -74,5 +79,9 @@ int nxd_time_sleep(int ms);
 // int nxd_time_await();
 int nxd_time_await_limit(int fps);
 // int nxd_time_delta();
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif
