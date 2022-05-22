@@ -10,7 +10,7 @@
 
 #include "nxdraw/backend/glfw/glfw.h"
 
-#include <bits/types/clock_t.h>
+//#include <bits/types/clock_t.h>
 #include <time.h>
 
 static nxdraw_Screen _screen;
