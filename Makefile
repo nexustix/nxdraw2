@@ -1,5 +1,7 @@
-LIB_INSTALL=/usr/lib
-INCLUDE_INSTALL=/usr/include
+install_prefix ?= /usr
+
+LIB_INSTALL=${install_prefix}/lib
+INCLUDE_INSTALL=${install_prefix}/include
 
 # destination for object files
 OBJDIR = build/obj
