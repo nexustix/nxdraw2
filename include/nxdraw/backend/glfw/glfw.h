@@ -35,7 +35,7 @@ int nxdraw_window_init(nxdraw_Window *self, int width, int height) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
   self->window = glfwCreateWindow(self->screen_width, self->screen_height,
-                                  "nxdraw3", NULL, NULL);
+                                  "nxdraw", NULL, NULL);
 
   if (!self->window) {
     glfwTerminate();
