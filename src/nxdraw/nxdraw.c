@@ -1,11 +1,16 @@
 #include "nxdraw/nxdraw.h"
-#include "nxdraw/colour.h"
+
+#include "nxdraw/bitmap.h"
+#include "nxdraw/canvas.h"
+
+//#include "nxdraw/colour.h"
 #include "nxdraw/draw.h"
 #include "nxdraw/event_buffer.h"
-#include "nxdraw/screen.h"
+//#include "nxdraw/screen.h"
+#include "nxdraw/pixelformat.h"
 #include "nxdraw/time.h"
 
-#include "nxdraw/char_draw.h"
+//#include "nxdraw/char_draw.h"
 #include "nxdraw/draw_area.h"
 
 #include "nxdraw/backend/glfw/glfw.h"
@@ -13,9 +18,9 @@
 //#include <bits/types/clock_t.h>
 #include <time.h>
 
-static nxdraw_Screen _screen;
-// static nxdraw_Colour _fg = {{255, 255, 255, 255}, 4};
-// static nxdraw_Colour _bg = {{0, 0, 0, 255}, 4};
+static nxdraw_Canvas canvas_;
+//  static nxdraw_Colour _fg = {{255, 255, 255, 255}, 4};
+//  static nxdraw_Colour _bg = {{0, 0, 0, 255}, 4};
 static unsigned int _fg = 1;
 static unsigned int _bg = 2;
 
@@ -23,9 +28,6 @@ static nxdraw_Window _window;
 static nxd_Event _event;
 
 static int _char_w = 8;
-// static int _char_h = 8;
-//  static int _cursor_x = 0;
-//  static int _cursor_y = 0;
 
 //
 //
@@ -40,13 +42,15 @@ int nxd_init_window(int width, int height) {
 }
 
 int nxd_init_canvas(unsigned char *sprite, int width, int height, int depth) {
-  _screen.width = width;
-  _screen.height = height;
-  _screen.d = depth;
-  _screen.pixelcount = _screen.width * _screen.height;
-  _screen.size = _screen.pixelcount * _screen.d;
 
-  _screen.data = sprite;
+  canvas_.width = width;
+  canvas_.height = height;
+  // canvas_.d = depth;
+  canvas_.pixelformat = NXD_FORMAT_RGBA_8888;
+  canvas_.pixelcount = canvas_.width * canvas_.height;
+  canvas_.size = canvas_.pixelcount * nxdraw_canvas_bytes_per_pixel(&canvas_);
+
+  canvas_.data = sprite;
 
   nxd_clip_disable();
 
@@ -54,8 +58,8 @@ int nxd_init_canvas(unsigned char *sprite, int width, int height, int depth) {
 }
 
 int nxd_screen_info(int *width, int *height) {
-  *width = _screen.width;
-  *height = _screen.height;
+  *width = canvas_.width;
+  *height = canvas_.height;
   return 0;
 }
 
@@ -64,7 +68,7 @@ int nxd_fullscreen(int state) { return state != 0; }
 int nxd_tick() { return nxdraw_window_tick(&_window); }
 
 int nxd_present() {
-  nxdraw_window_render(&_window, _screen.data, _screen.width, _screen.height);
+  nxdraw_window_render(&_window, canvas_.data, canvas_.width, canvas_.height);
   return 0;
 }
 
@@ -74,38 +78,38 @@ int nxd_present() {
 //
 //
 int nxd_clip(int x, int y, int w, int h) {
-  _area.x1 = (x >= 0) ? (x < _screen.width) ? x : _screen.width : 0;
-  _area.y1 = (y >= 0) ? (y < _screen.width) ? y : _screen.height : 0;
-  _area.x2 = (x + w >= 0) ? (x + w < _screen.width) ? x + w : _screen.width : 0;
-  _area.y2 =
-      (y + h >= 0) ? (y + h < _screen.width) ? y + h : _screen.height : 0;
+  area_.x1 = (x >= 0) ? (x < canvas_.width) ? x : canvas_.width : 0;
+  area_.y1 = (y >= 0) ? (y < canvas_.width) ? y : canvas_.height : 0;
+  area_.x2 = (x + w >= 0) ? (x + w < canvas_.width) ? x + w : canvas_.width : 0;
+  area_.y2 =
+      (y + h >= 0) ? (y + h < canvas_.width) ? y + h : canvas_.height : 0;
   return 0;
 }
 int nxd_clip_disable() {
-  _area.x1 = 0;
-  _area.y1 = 0;
-  _area.x2 = _screen.width;
-  _area.y2 = _screen.height;
+  area_.x1 = 0;
+  area_.y1 = 0;
+  area_.x2 = canvas_.width;
+  area_.y2 = canvas_.height;
 
   return 0;
 }
 
 int nxd_clip_info(int *x, int *y, int *w, int *h) {
-  *x = _area.x1;
-  *y = _area.y1;
-  *w = _area.x2 - _area.x1;
-  *h = _area.y2 - _area.y1;
+  *x = area_.x1;
+  *y = area_.y1;
+  *w = area_.x2 - area_.x1;
+  *h = area_.y2 - area_.y1;
   return 0;
 }
 
 int nxd_translate(int x, int y) {
-  _area.xt = x;
-  _area.yt = y;
+  area_.xt = x;
+  area_.yt = y;
   return 0;
 }
 int nxd_translate_info(int *x, int *y) {
-  *x = _area.xt;
-  *y = _area.yt;
+  *x = area_.xt;
+  *y = area_.yt;
   return 0;
 }
 
@@ -115,13 +119,13 @@ int nxd_translate_info(int *x, int *y) {
 //
 //
 int nxd_init_palette(unsigned char *data, unsigned int size) {
-  nxdraw_palette_set(data, size, 4);
+  nxdraw_palette_set(&palette_, data, size, 4);
   return 0;
 }
 
 int nxd_palette_rgb(unsigned int id, unsigned char r, unsigned char g,
                     unsigned char b) {
-  nxdraw_palette_set_colour_rgb(id, r, g, b);
+  nxdraw_palette_set_colour_rgb(&palette_, id, r, g, b);
   return 0;
 }
 
@@ -156,32 +160,29 @@ int nxd_palette_swap() {
 
 int nxd_draw_pixel(int x, int y) {
   // if (nxdraw_draw_area_translate(&x, &y))
-  // nxdraw_draw_pixel(&_screen, &_fg, x, y);
-  nxdraw_draw_pixel(&_screen, _fg, x, y);
+  // nxdraw_draw_pixel(&canvas_, &_fg, x, y);
+  nxdraw_canvas_put(&canvas_, _fg, x, y);
   return 0;
 }
 
 int nxd_draw_line(int x1, int y1, int x2, int y2) {
   // if (nxdraw_draw_area_translate(&x, &y))
-  // nxdraw_draw_pixel(&_screen, &_fg, x, y);
-  nxdraw_draw_line(&_screen, _fg, x1, y1, x2, y2);
+  // nxdraw_draw_pixel(&canvas_, &_fg, x, y);
+  nxdraw_draw_line(&canvas_, _fg, x1, y1, x2, y2);
   return 0;
 }
 
 int nxd_draw_rectangle(int x, int y, int w, int h) {
-  nxdraw_draw_rectangle(&_screen, _fg, x, y, w, h);
+  nxdraw_draw_rectangle(&canvas_, _fg, x, y, w, h);
   return 0;
 }
 int nxd_draw_rectangleb(int x, int y, int w, int h) {
-  nxdraw_draw_rectangleb(&_screen, _fg, x, y, w, h);
+  nxdraw_draw_rectangleb(&canvas_, _fg, x, y, w, h);
   return 0;
 }
 int nxd_draw_clear() {
-  // nxd_draw_rectangle(0, 0, _screen.width, _screen.height);
-  // nxd_draw_rectangle(0 - _area.xt, 0 - _area.yt, _screen.width,
-  // _screen.height);
-  nxdraw_draw_rectangle(&_screen, _bg, 0 - _area.xt, 0 - _area.yt,
-                        _screen.width, _screen.height);
+  nxdraw_draw_rectangle(&canvas_, _bg, 0 - area_.xt, 0 - area_.yt,
+                        canvas_.width, canvas_.height);
   return 0;
 }
 
@@ -191,7 +192,7 @@ int nxd_draw_bitmap(unsigned char *bitmap, int width, int height, int x,
   for (int py = 0; py < height; py++) {
     for (int px = 0; px < width; px++) {
 
-      nxdraw_draw_pixel(&_screen, bitmap[i], x + px, y + py);
+      nxdraw_canvas_put(&canvas_, bitmap[i], x + px, y + py);
       i++;
     }
   }
@@ -199,7 +200,7 @@ int nxd_draw_bitmap(unsigned char *bitmap, int width, int height, int x,
 }
 
 int nxd_draw_char(unsigned char *font, unsigned char c, int x, int y) {
-  nxdraw_char_draw(&_screen, font, _fg, _bg, 8, c, x, y);
+  nxdraw_char_draw(&canvas_, font, _fg, _bg, 8, c, x, y);
   return 0;
 }
 

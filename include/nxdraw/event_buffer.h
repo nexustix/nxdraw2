@@ -3,15 +3,6 @@
 
 #include "event.h"
 
-/*
-typedef struct nxdraw_EventBuffer {
-  nxd_Event *data;
-  unsigned int items_max;
-  unsigned int items_cur;
-  // int top;
-} nxdraw_EventBuffer;
-*/
-
 typedef struct nxdraw_EventBuffer {
   nxd_Event *data;
   unsigned int begin;
